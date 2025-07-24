@@ -11,6 +11,7 @@ public final class MineLabSecurityTemplate extends JavaPlugin {
     private Servermac servermac;
     private Pluginbit pluginbit;
     private Hashage hashage;
+    private Monetizcheck monetizcheck;
 
     @Override
     public void onEnable() {
@@ -45,6 +46,10 @@ public final class MineLabSecurityTemplate extends JavaPlugin {
 
         //Licence Manager
         licenseManager = new LicenseManager();
+
+        //Monetization plugin Check
+        monetizcheck = new Monetizcheck();
+        monetizcheck.detectMonetizationPlugins();
 
         //FIN
         getLogger().info("Enabled");
