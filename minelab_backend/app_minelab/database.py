@@ -1,19 +1,13 @@
-# minelab_backend/app_minelab/database.py
-
+import os
 from sqlalchemy import create_engine
-from sqlalchemy.orm import declarative_base, sessionmaker
+from sqlalchemy.orm import sessionmaker, declarative_base
 
-DATABASE_URL = "sqlite:///minelab_backend/minelab.db"
+BASE_DIR = os.path.abspath(os.path.dirname(__file__))
+DB_DIR = os.path.join(BASE_DIR, "minelab_backend")
+os.makedirs(DB_DIR, exist_ok=True)  # <-- crée le dossier s'il n'existe pas
 
-engine = create_engine(DATABASE_URL, connect_args={"check_same_thread": False})  # pour SQLite
-SessionLocal = sessionmaker(bind=engine, autocommit=False, autoflush=False)
+DATABASE_URL = f"sqlite:///{os.path.join(DB_DIR, 'minelab.db')}"
 
+engine = create_engine(DATABASE_URL, connect_args={"check_same_thread": False})
+SessionLocal = sessionmaker(bind=engine, autoflush=False, autocommit=False)
 Base = declarative_base()
-
-# pour FastAPI : fournir une session par requête
-def get_db():
-    db = SessionLocal()
-    try:
-        yield db
-    finally:
-        db.close()
