@@ -1,5 +1,5 @@
 from minelab_backend.app_minelab.database import Base, engine, SessionLocal
-from models import License
+from minelab_backend.app_minelab.models.license import License
 
 
 def add_license(hash_sent: str, size: int, owner_id: int):
@@ -20,4 +20,5 @@ def add_license(hash_sent: str, size: int, owner_id: int):
         return new_license
 
 if __name__ == "__main__":
-    add_license("hellohelloheloo", 1234, 1)
+    helo = add_license("hello", 1, 1)
+    print(helo.id)

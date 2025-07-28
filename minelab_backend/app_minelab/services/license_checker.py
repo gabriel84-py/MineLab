@@ -1,5 +1,5 @@
 from minelab_backend.app_minelab.database import Base, engine, SessionLocal
-from models import License
+from minelab_backend.app_minelab.models.license import License
 
 def license_checker(id_sent: int, hash_sent: str, taille: int):
     # Crée la BDD si elle n'existe pas
@@ -16,4 +16,4 @@ def license_checker(id_sent: int, hash_sent: str, taille: int):
         return False
 
 if __name__ == "__main__":
-    license_checker(1, "hellohelloheloo", 1234)
+    print(license_checker(3, "hello", 1))
