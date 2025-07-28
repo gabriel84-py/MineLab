@@ -26,6 +26,6 @@ def create_user(email: str, passwd: str):
 
 
 if __name__ == "__main__":
-    user = create_user("hello@hello.com", "je suis trop nuuuul")
+    user = create_user("test", "hello")
     print(user.id)
     print(user.email)
