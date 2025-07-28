@@ -10,12 +10,14 @@ def add_license(hash_sent: str, size: int, owner_id: int):
     existing_licence = db.query(License).filter_by(hash=hash_sent).first()
 
     if existing_licence:
-        print("Utilisateur déjà existant :", existing_licence)
+        print("License déjà existante :", existing_licence)
+        return existing_licence
     else:
         db.add(new_license)
         db.commit()
         db.refresh(new_license)  # <= seulement ici, après ajout réussi
-        print("Utilisateur ajouté :", new_license)
+        print("License ajouté :", new_license)
+        return new_license
 
 if __name__ == "__main__":
     add_license("hellohelloheloo", 1234, 1)
