@@ -6,4 +6,4 @@ class Plugin(Base):
 
     id = Column(Integer, primary_key=True, index=True)
     owner = Column(String, unique=True, index=True)
-    hashed_password = Column(String)
+    expiration_date = Column(String)
