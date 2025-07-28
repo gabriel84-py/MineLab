@@ -1,4 +1,4 @@
-# minelab_backend/app/database.py
+# minelab_backend/app_minelab/database.py
 
 from sqlalchemy import create_engine
 from sqlalchemy.orm import declarative_base, sessionmaker
