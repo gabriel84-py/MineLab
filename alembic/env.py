@@ -5,7 +5,7 @@ target_metadata = Base.metadata
 from logging.config import fileConfig
 
 from sqlalchemy import engine_from_config
-from sqlalchemy import pool
+from sqlalchemy import pool, text
 
 from alembic import context
 
@@ -60,6 +60,7 @@ def run_migrations_online() -> None:
     and associate a connection with the context.
 
     """
+
     connectable = engine_from_config(
         config.get_section(config.config_ini_section, {}),
         prefix="sqlalchemy.",
@@ -67,6 +68,10 @@ def run_migrations_online() -> None:
     )
 
     with connectable.connect() as connection:
+        # Diagnostic : liste les tables visibles par alembic
+        result = connection.execute(text("SELECT name FROM sqlite_master WHERE type='table';"))
+        print("Tables in DB:", [row[0] for row in result])
+
         context.configure(
             connection=connection, target_metadata=target_metadata
         )

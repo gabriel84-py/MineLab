@@ -1,25 +1,38 @@
 from minelab_backend.app_minelab.database import Base, engine, SessionLocal
-from minelab_backend.app_minelab.models.license import License
-#from minelab_backend.app_minelab.services.add_hash_license import add_hash
+from minelab_backend.app_minelab.models.license import License, LicenseHash
+
+Base.metadata.create_all(bind=engine)
 
 
 def add_license(hash_sent: str, size: int, owner_id: int, nb_de_hash: int):
-    Base.metadata.create_all(bind=engine)
-    db = SessionLocal()
+    with SessionLocal() as db:
+        # Vérifie si le hash existe déjà
+        existing_hash = db.query(LicenseHash).filter_by(hash=hash_sent).first()
+        if existing_hash:
+            print("Hash déjà associé à une licence :", existing_hash.license_id)
+            return existing_hash.license
 
-    new_license = License(hash=hash_sent, size=size, owner_id=owner_id, activations_autorisees=nb_de_hash)
-    existing_licence = db.query(License).filter_by(hash=hash_sent).first()
+        # Crée une nouvelle licence
+        new_license = License(
+            size=size,
+            owner_id=owner_id,
+            activations_autorisees=nb_de_hash,
+            activate_times=1
 
-    if existing_licence:
-        print("License déjà existante :", existing_licence)
-        return existing_licence
-    else:
+        )
+
+        # Ajoute le hash comme objet lié
+        new_hash = LicenseHash(hash=hash_sent)
+        new_license.hashes.append(new_hash)
+
         db.add(new_license)
         db.commit()
-        db.refresh(new_license)  # <= seulement ici, après ajout réussi
-        print("License ajouté :", new_license)
+        db.refresh(new_license)
+
+        print("Licence ajoutée :", new_license.id)
         return new_license
 
+
 if __name__ == "__main__":
-    helo = add_license("hello", 1, 1)
-    print(helo.id)
+    license = add_license("hello", 1, 1, 3)
+    print("ID de la licence :", license.id)
