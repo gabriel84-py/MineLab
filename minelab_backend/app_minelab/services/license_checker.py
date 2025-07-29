@@ -25,4 +25,4 @@ def license_checker(id_sent: int, hash_sent: str, taille: int):
 
 
 if __name__ == "__main__":
-    print(license_checker(1, "hello", 1))
+    print(license_checker(1, "hell", 1))

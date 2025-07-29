@@ -1,5 +1,10 @@
+import os
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, declarative_base
+
+BASE_DIR = os.path.abspath(os.path.dirname(__file__))
+DB_DIR = os.path.join(BASE_DIR, "minelab_backend")
+os.makedirs(DB_DIR, exist_ok=True)  # <-- crée le dossier s'il n'existe pas
 
 DATABASE_URL = "sqlite:////Users/gabrieljeanvermeille/PycharmProjects/MineLab/minelab_backend/app_minelab/minelab_backend/minelab.db"
 

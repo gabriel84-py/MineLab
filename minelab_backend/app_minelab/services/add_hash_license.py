@@ -44,4 +44,4 @@ def add_hash(id_sent: int, taille_sent: int, hash_sent: str):
 
 
 if __name__ == "__main__":
-    add_hash(1, 1, "hellilr")
+    add_hash(1, 1, "hellila")
