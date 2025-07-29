@@ -1,12 +1,13 @@
 from minelab_backend.app_minelab.database import Base, engine, SessionLocal
 from minelab_backend.app_minelab.models.license import License
+#from minelab_backend.app_minelab.services.add_hash_license import add_hash
 
 
-def add_license(hash_sent: str, size: int, owner_id: int):
+def add_license(hash_sent: str, size: int, owner_id: int, nb_de_hash: int):
     Base.metadata.create_all(bind=engine)
     db = SessionLocal()
 
-    new_license = License(hash=hash_sent, size=size, owner_id=owner_id)
+    new_license = License(hash=hash_sent, size=size, owner_id=owner_id, activations_autorisees=nb_de_hash)
     existing_licence = db.query(License).filter_by(hash=hash_sent).first()
 
     if existing_licence:

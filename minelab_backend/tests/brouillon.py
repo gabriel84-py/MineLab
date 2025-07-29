@@ -1,14 +1,11 @@
-import pandas as pd
+from minelab_backend.app_minelab.database import Base, engine, SessionLocal
+from minelab_backend.app_minelab.models.license import License
 
-def verify(ID: int, hash: str, taille: int):
-    df_BDD = pd.read_csv('/Users/gabrieljeanvermeille/PycharmProjects/MineLab/minelab_backend/tests/simu_bdd.csv')
-    ligne_ID = df_BDD[df_BDD["srvID"] == ID]
-    hash_ID = str(ligne_ID["hash"].values[0])
-    taille_ID = int(ligne_ID["taille"].values[0])
-    if hash_ID != hash:
-        return False
-    if taille_ID != taille:
-        return False
-    return True
+id_sent = int(input("ID de la license : "))
 
-print(verify(1234, "0", 0))
+Base.metadata.create_all(bind=engine)
+db = SessionLocal()
+
+existing_licence = db.query(License).filter_by(id=id_sent).first()
+
+print(existing_licence.hash)
