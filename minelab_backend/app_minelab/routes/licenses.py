@@ -7,6 +7,7 @@ from minelab_backend.app_minelab.database import Base, engine, SessionLocal
 from minelab_backend.app_minelab.models.license import License, LicenseHash
 from minelab_backend.app_minelab.models.plugin import Plugin
 
+
 router = APIRouter(prefix="/verify", tags=["Verify"])
 
 @router.get("")
@@ -20,24 +21,25 @@ def verify(id: int, hash: str, taille: int):
 
         if not is_existing_licence and id_plugin:
             add_license(hash, taille, id_plugin.owner, id_plugin.nb_de_hash)
-            return {"status": "valid", "message": "Licence active."}
+            result = {"status": "valid", "message": "Licence active (créée)."}
+            return signer_json(result)
 
-        # Vérification sécurisée
         if is_existing_licence:
             if not hasattr(is_existing_licence, "hashes"):
-                return {"status": "error", "message": "Attribut 'hashes' manquant dans la licence."}
+                return signer_json({"status": "error", "message": "Attribut 'hashes' manquant dans la licence."})
 
             if hash != is_existing_licence.hashes:
                 add_hash(is_existing_licence.id, taille, hash)
 
             if license_checker(id, hash, taille):
-                return {"status": "valid", "message": "Licence active."}
+                return signer_json({"status": "valid", "message": "Licence active."})
             else:
-                return {"status": "invalid", "message": "Licence non active."}
+                return signer_json({"status": "invalid", "message": "Licence non active."})
         else:
-            return {"status": "error", "message": "Licence et plugin introuvables."}
+            return signer_json({"status": "error", "message": "Licence et plugin introuvables."})
 
     except Exception as e:
-        return {"status": "error", "message": str(e)}
+        return signer_json({"status": "error", "message": str(e)})
     finally:
         db.close()
+
