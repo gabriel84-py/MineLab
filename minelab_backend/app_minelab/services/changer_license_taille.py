@@ -18,3 +18,7 @@ def changer_taille(id_sent: int, taille_sent: int):
         print("Licence non trouvée")
 
     db.close()
+
+
+if __name__ == "__main__":
+    changer_taille(6, 60419744)
