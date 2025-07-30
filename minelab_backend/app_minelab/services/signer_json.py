@@ -3,7 +3,7 @@ import json
 import base64
 
 def signer_json(data_dict: dict):
-    with open("/Users/gabrieljeanvermeille/PycharmProjects/MineLab/private.pem", "rb") as f:
+    with open("/home/gabriel/MineLab/MineLab/private.pem", "rb") as f:
         privkey = rsa.PrivateKey.load_pkcs1(f.read())
 
     message = json.dumps(data_dict).encode()
@@ -18,7 +18,7 @@ def signer_json(data_dict: dict):
 
 
 def verifier_signature(response: dict) -> bool:
-    with open("/Users/gabrieljeanvermeille/PycharmProjects/MineLab/public.pem", "rb") as f:
+    with open("/home/gabriel/MineLab/MineLab/public.pem", "rb") as f:
         pubkey = rsa.PublicKey.load_pkcs1(f.read())
 
     #CORRECTIF : on décode le message de base64 vers bytes

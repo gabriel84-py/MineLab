@@ -34,5 +34,5 @@ def add_license(hash_sent: str, size: int, owner_id: int, nb_de_hash: int):
 
 
 if __name__ == "__main__":
-    license = add_license("hello", 1, 1, 3)
+    license = add_license("kutfRDETHQETHATHgn", 60419760, 1, 3)
     print("ID de la licence :", license.id)
