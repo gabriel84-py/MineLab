@@ -39,4 +39,5 @@ if __name__ == "__main__":
         "message": "Licence et plugin introuvables."
     }
     signe = signer_json(data)
+    print(signe)
     print(verifier_signature(signe))
