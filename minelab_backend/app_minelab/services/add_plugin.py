@@ -6,7 +6,7 @@ Base.metadata.create_all(bind=engine)
 
 def add_plugin(owner_id: int, nb_activations: int, expiration_date: date):
     with SessionLocal() as db:
-        new_plugin = License(
+        new_plugin = Plugin(
             owner=owner_id,
             nb_de_hash=nb_activations,
             expiration_date=expiration_date
