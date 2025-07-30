@@ -11,18 +11,33 @@ router = APIRouter(prefix="/verify", tags=["Verify"])
 
 @router.get("")
 def verify(id: int, hash: str, taille: int):
-    Base.metadata.create_all(bind=engine)
-    db = SessionLocal()
-    is_existing_licence = db.query(License).filter_by(id=id).first()
-    id_plugin = db.query(Plugin).filter_by(id=id).first()
-    if not is_existing_licence and id_plugin:
-        add_license(hash, taille, id_plugin.owner, id_plugin.nb_de_hash)
-        return {"status": "valid", "message": "Licence active."}
+    try:
+        Base.metadata.create_all(bind=engine)
+        db = SessionLocal()
 
-    if hash != is_existing_licence.hashes:
-        add_hash(is_existing_licence.id, taille, hash)
+        is_existing_licence = db.query(License).filter_by(id=id).first()
+        id_plugin = db.query(Plugin).filter_by(id=id).first()
 
-    if license_checker(id, hash, taille):
-        return { "status": "valid", "message": "Licence active." }
-    else:
-        return { "status": "invalid", "message": "Licence not active." }
+        if not is_existing_licence and id_plugin:
+            add_license(hash, taille, id_plugin.owner, id_plugin.nb_de_hash)
+            return {"status": "valid", "message": "Licence active."}
+
+        # Vérification sécurisée
+        if is_existing_licence:
+            if not hasattr(is_existing_licence, "hashes"):
+                return {"status": "error", "message": "Attribut 'hashes' manquant dans la licence."}
+
+            if hash != is_existing_licence.hashes:
+                add_hash(is_existing_licence.id, taille, hash)
+
+            if license_checker(id, hash, taille):
+                return {"status": "valid", "message": "Licence active."}
+            else:
+                return {"status": "invalid", "message": "Licence non active."}
+        else:
+            return {"status": "error", "message": "Licence et plugin introuvables."}
+
+    except Exception as e:
+        return {"status": "error", "message": str(e)}
+    finally:
+        db.close()

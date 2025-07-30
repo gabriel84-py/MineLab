@@ -2,7 +2,7 @@ import requests
 
 
 def test_verify_api():
-    url = "http://0.0.0.0:8000/verify"  # à adapter si ton serveur tourne sur une autre URL/port
+    url = "http://192.168.1.47:8000/verify"  # à adapter si ton serveur tourne sur une autre URL/port
 
     # Exemple de paramètres de test
     params = {
